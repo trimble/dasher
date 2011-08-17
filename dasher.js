@@ -1,15 +1,26 @@
 var express = require('express')
-    , io = require('socket.io');
+    , socketio = require('socket.io');
 
 app = express.createServer();
 app.use(express.logger());
 app.use(express.static(__dirname + '/public'));
+app.listen(80);
 
+//HTTP
 app.get('/', function(req, res) {
     res.send('sup');
 });
 
-app.listen(80);
-io.listen(app);
+//WebSocket
+io = socketio.listen(app);
+
+io.sockets.on('connection', function(socket) {
+    console.log('Client connected');
+    socket.emit('foo', {payload: 'sup'});
+});
+
+setInterval(function(){
+    io.sockets.emit('foo', {payload: new Date().getTime()});
+}, 1000);
 
 console.log('Server started on port %s', app.address().port);
