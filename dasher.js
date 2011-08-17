@@ -19,7 +19,6 @@ io = socketio.listen(app);
 
 io.sockets.on('connection', function(socket) {
     console.log('Client connected');
-    socket.emit('foo', {payload: 'sup'});
 });
 
 lastChecked = new Date();
@@ -30,7 +29,7 @@ pollRss = function(){
         _.each(posts.reverse(), function(post){
             if (post.pubDate > lastChecked) {
                 lastChecked = post.pubDate;
-                io.sockets.emit('foo', {payload: post.title});
+                io.sockets.emit('newItem', {payload: post.title});
             }
         });
     });
