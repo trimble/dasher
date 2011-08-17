@@ -4,5 +4,5 @@ var app = require('express').createServer()
 app.listen(80);
 
 app.get('/', function(req, res) {
-    return 'sup';
+    res.send('sup');
 });
