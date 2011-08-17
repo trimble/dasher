@@ -3,7 +3,9 @@
     "version": "0.0.1",
     "main": "dasher.js",
     "dependencies": {
-        "socket.io": "0.7.9",
-        "express": "2.4.3"
+          "socket.io": "0.7.9"
+        , "express": "2.4.3"
+        , "easyrss": "0.2.3"
+        , "underscore": "1.1.7"
     }
 }

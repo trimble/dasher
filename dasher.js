@@ -1,5 +1,8 @@
 var express = require('express')
-    , socketio = require('socket.io');
+    , socketio = require('socket.io')
+    , rss = require('easyrss')
+    , _ = require('underscore')
+    , inspect = require('util').inspect;
 
 app = express.createServer();
 app.use(express.logger());
@@ -19,8 +22,20 @@ io.sockets.on('connection', function(socket) {
     socket.emit('foo', {payload: 'sup'});
 });
 
-setInterval(function(){
-    io.sockets.emit('foo', {payload: new Date().getTime()});
-}, 1000);
+lastChecked = new Date();
+lastChecked.setMinutes(lastChecked.getMinutes() - 2);
+pollRss = function(){
+    console.log('Checking RSS...');
+    rss.parseURL('http://www.reddit.com/new/.rss?sort=new', function(posts) {
+        _.each(posts.reverse(), function(post){
+            if (post.pubDate > lastChecked) {
+                lastChecked = post.pubDate;
+                io.sockets.emit('foo', {payload: post.title});
+            }
+        });
+    });
+};
+
+setInterval(pollRss, 10000);
 
 console.log('Server started on port %s', app.address().port);
