@@ -1,0 +1,9 @@
+{
+    "name": "dasher",
+    "version": "0.0.1",
+    "main": "dasher.js",
+    "dependencies": {
+        "socket.io": "0.7.9",
+        "express": "2.4.3"
+    }
+}
